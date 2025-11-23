@@ -1,0 +1,13 @@
+# Render部署配置文件（可选）
+# 这个文件可以帮助Render更好地理解项目配置
+
+services:
+  - type: web
+    name: pdf-to-ppt
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+
