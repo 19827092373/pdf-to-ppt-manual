@@ -2,7 +2,8 @@
 
 一个帮助物理老师将PDF格式的习题册转换为PPT的工具，每页PPT包含一道题目，方便在多媒体大屏上进行讲解。
 
-[![GitHub](https://img.shields.io/github/license/your-username/pdf-to-ppt-manual)](LICENSE)
+**GitHub仓库**：https://github.com/19827092373/pdf-to-ppt-manual
+
 [![Python](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/flask-3.0.0-green.svg)](https://flask.palletsprojects.com/)
 
@@ -15,31 +16,53 @@
 - 📊 自动生成PPT（每页一题）
 - 📐 智能图片布局（左上角，不超过页面一半）
 
-## 安装说明
+## 🚀 快速开始
 
-### 1. 安装Python依赖
+### 方式一：下载使用（推荐新手）
+
+1. **获取代码**
+   - 访问：https://github.com/19827092373/pdf-to-ppt-manual
+   - 点击绿色的 "Code" 按钮 → "Download ZIP"
+   - 解压到任意文件夹
+
+2. **安装Python**
+   - 访问：https://www.python.org/downloads/
+   - 下载并安装Python 3.7+（安装时勾选"Add Python to PATH"）
+
+3. **安装依赖**
+   ```bash
+   pip install -r requirements.txt
+   ```
+   国内用户可使用镜像：
+   ```bash
+   pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+   ```
+
+4. **启动应用**
+   - Windows：双击 `run.bat`
+   - 或命令行运行：`python app.py`
+
+5. **访问应用**
+   - 打开浏览器访问：`http://localhost:5001`
+
+### 方式二：使用Git克隆（推荐开发者）
 
 ```bash
+git clone https://github.com/19827092373/pdf-to-ppt-manual.git
+cd pdf-to-ppt-manual
 pip install -r requirements.txt
+python app.py
 ```
 
-### 2. 安装系统依赖
+### 方式三：在线使用（如果已部署）
 
-#### Windows系统
-下载并安装poppler:
-- 访问 https://github.com/oschwartz10612/poppler-windows/releases/
-- 下载最新版本
-- 解压后将bin目录添加到系统PATH环境变量
+如果项目已部署到云平台，直接访问部署地址即可使用，无需安装。
 
-#### Linux系统
-```bash
-sudo apt-get install poppler-utils
-```
+---
 
-#### macOS系统
-```bash
-brew install poppler
-```
+## 📖 详细使用说明
+
+查看 **[用户使用指南.md](用户使用指南.md)** 了解完整的使用步骤和常见问题。
 
 ## 使用方法
 
@@ -87,9 +110,16 @@ pdf-to-ppt-manual/
 
 - **后端**: Python Flask
 - **前端**: HTML5 + CSS3 + JavaScript (原生)
-- **PDF处理**: pdf2image
+- **PDF处理**: PyMuPDF（推荐，无需poppler）或 pdf2image + poppler
 - **图片处理**: Pillow
 - **PPT生成**: python-pptx
+
+## 📚 相关文档
+
+- **[用户使用指南.md](用户使用指南.md)** - 完整的使用说明（**推荐新用户查看**）
+- **[USAGE.md](USAGE.md)** - 详细操作步骤
+- **[GitHub部署一键指南.md](GitHub部署一键指南.md)** - 部署到GitHub
+- **[轻量服务器部署方案.md](轻量服务器部署方案.md)** - 国内服务器部署
 
 ## 注意事项
 
