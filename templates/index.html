@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF习题拆分PPT工具</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部标题栏 -->
+        <header class="header">
+            <h1>📚 PDF习题拆分PPT工具</h1>
+            <p class="subtitle">将PDF习题册转换为PPT，每页一题，方便课堂讲解</p>
+        </header>
+
+        <!-- 上传区域 -->
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-box">
+                <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📄</div>
+                    <p>点击或拖拽PDF文件到此处上传</p>
+                    <p class="upload-hint">支持PDF格式，最大50MB</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主工作区 -->
+        <div class="main-workspace" id="mainWorkspace" style="display: none;">
+            <!-- 左侧：页面缩略图列表 -->
+            <aside class="sidebar">
+                <h2>PDF页面</h2>
+                <div class="page-thumbnails" id="pageThumbnails">
+                    <!-- 动态生成缩略图 -->
+                </div>
+            </aside>
+
+            <!-- 中间：图片显示和选择区域 -->
+            <main class="canvas-area">
+                <div class="canvas-header">
+                    <h3 id="currentPageTitle">选择页面开始标注</h3>
+                    <div class="canvas-controls">
+                        <button class="btn btn-secondary" id="clearSelectionBtn" style="display: none;">清除当前选择</button>
+                        <button class="btn btn-secondary" id="deleteSelectedBtn" style="display: none;">删除选中框</button>
+                    </div>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="mainCanvas"></canvas>
+                    <div class="canvas-overlay" id="canvasOverlay">
+                        <p>请从左侧选择页面</p>
+                    </div>
+                </div>
+                <div class="canvas-hint">
+                    <p>💡 提示：点击并拖拽绘制矩形框选择题目，可以拖拽和缩放矩形框调整位置。对于跨页题目，可以先选择一个题目点击"合并"按钮，再选择另一张图片继续合并。</p>
+                </div>
+            </main>
+
+            <!-- 右侧：已选择题目列表和操作 -->
+            <aside class="selection-panel">
+                <h2>已选择题目</h2>
+                <div class="selection-list" id="selectionList">
+                    <p class="empty-hint">暂无选择</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-large" id="generateBtn" disabled>生成PPT</button>
+                    <div class="progress-bar" id="progressBar" style="display: none;">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- 消息提示 -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
