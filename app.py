@@ -51,9 +51,19 @@ def upload_pdf():
     file.save(filepath)
     
     try:
+        # 验证文件大小
+        file_size = os.path.getsize(filepath)
+        if file_size == 0:
+            return jsonify({'error': 'PDF文件为空'}), 400
+        if file_size > 50 * 1024 * 1024:
+            return jsonify({'error': 'PDF文件过大（超过50MB）'}), 400
+        
         # 将PDF转换为图片
         pdf_handler = PDFHandler()
-        images_info = pdf_handler.pdf_to_images(filepath, file_id)
+        images_info = pdf_handler.pdf_to_images(filepath, file_id, app.config['TEMP_FOLDER'])
+        
+        if not images_info or len(images_info) == 0:
+            return jsonify({'error': 'PDF处理失败：没有成功转换任何页面'}), 500
         
         return jsonify({
             'success': True,
@@ -62,7 +72,14 @@ def upload_pdf():
             'pages': images_info
         })
     except Exception as e:
-        return jsonify({'error': f'处理PDF时出错: {str(e)}'}), 500
+        # 记录详细错误信息（用于调试）
+        import traceback
+        error_detail = traceback.format_exc()
+        print(f"PDF处理错误: {error_detail}")
+        
+        # 返回用户友好的错误信息
+        error_msg = str(e)
+        return jsonify({'error': f'处理PDF时出错: {error_msg}'}), 500
 
 @app.route('/api/image/<file_id>/<int:page>')
 def get_image(file_id, page):

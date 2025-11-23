@@ -100,10 +100,30 @@ function handleDrop(e) {
 
 // 上传文件
 async function uploadFile(file) {
+    // 验证文件类型
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+        showToast('请上传PDF文件', 'error');
+        return;
+    }
+    
+    // 验证文件大小
+    if (file.size === 0) {
+        showToast('文件为空，请选择有效的PDF文件', 'error');
+        return;
+    }
+    if (file.size > 50 * 1024 * 1024) {
+        showToast('文件过大（超过50MB），请选择较小的PDF文件', 'error');
+        return;
+    }
+    
     const formData = new FormData();
     formData.append('file', file);
     
     showToast('正在上传PDF文件...', 'info');
+    
+    // 显示进度提示
+    elements.progressBar.style.display = 'block';
+    elements.progressFill.style.width = '30%';
     
     try {
         const response = await fetch('/api/upload', {
@@ -111,12 +131,23 @@ async function uploadFile(file) {
             body: formData
         });
         
+        elements.progressFill.style.width = '60%';
+        
         const data = await response.json();
+        
+        elements.progressFill.style.width = '100%';
         
         if (data.success) {
             state.fileId = data.file_id;
             state.pages = data.pages;
             state.selections = {};
+            
+            // 验证是否有页面
+            if (!data.pages || data.pages.length === 0) {
+                showToast('PDF处理失败：没有找到任何页面', 'error');
+                elements.progressBar.style.display = 'none';
+                return;
+            }
             
             // 显示主工作区
             elements.uploadSection.style.display = 'none';
@@ -125,12 +156,21 @@ async function uploadFile(file) {
             // 渲染页面缩略图
             renderPageThumbnails();
             
-            showToast('PDF上传成功！', 'success');
+            setTimeout(() => {
+                elements.progressBar.style.display = 'none';
+                showToast(`PDF上传成功！共${data.pages.length}页`, 'success');
+            }, 500);
         } else {
-            showToast(data.error || '上传失败', 'error');
+            elements.progressBar.style.display = 'none';
+            const errorMsg = data.error || '上传失败';
+            showToast(errorMsg, 'error');
+            console.error('上传错误:', errorMsg);
         }
     } catch (error) {
-        showToast('上传失败: ' + error.message, 'error');
+        elements.progressBar.style.display = 'none';
+        const errorMsg = '上传失败: ' + (error.message || '网络错误或服务器无响应');
+        showToast(errorMsg, 'error');
+        console.error('上传异常:', error);
     }
 }
 
